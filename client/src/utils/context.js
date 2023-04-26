@@ -21,10 +21,11 @@ const AppContext = ({ children }) => {
     }, [location]);
 
     useEffect(() => {
-        let count = cartItems.length;
-        setCartCount(count);
-        
-        
+        // let count = cartItems.length;
+        setCartCount(cartItems.length);
+        // let count = 0;
+        // cartItems?.map((item) => (count += item.attributes.quantity));
+        // setCartCount(count);
         let subTotal = 0;
         cartItems.map(
             (item) =>

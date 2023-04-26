@@ -68,7 +68,10 @@ const Cart = ({ setShowCart }) => {
                 {!cartItems?.length && <div className="empty-cart">
                     <BsCartX />
                     <span>Không có sản phẩm nào</span>
-                    <button className='return-cta' onClick={() => { }} >Mua Ngay</button>
+                    <button className='return-cta' onClick={() => {
+                        navigate('/');
+                        setShowCart(false);
+                    }} >Mua Ngay</button>
                 </div>}
 
             </div>

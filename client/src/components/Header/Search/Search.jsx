@@ -11,6 +11,7 @@ const Search = ({ setShowSearch }) => {
     const navigate = useNavigate();
     const [focusedIndex, setFocusedIndex] = useState(0);
     const resultRefs = useRef([]);
+    const inputRef = useRef(null);
     const [focusedItem, setFocusedItem] = useState(null);
     const firstProductRef = useRef(null)
     const onchange = (e) => {
@@ -21,12 +22,9 @@ const Search = ({ setShowSearch }) => {
     if (!query.length) {
         data = null;
     }
-    useEffect(() => {
-        if (data?.data?.length) {
-            resultRefs.current[focusedIndex].focus(); // Focus vào sản phẩm đầu tiên
-            // setFocusedIndex(0)
-        }
-    }, [data, focusedIndex]);
+  
+      
+     
 
     // const handleKeyDown = (e) => {
     //     if (e.key === "ArrowUp") {
@@ -39,7 +37,7 @@ const Search = ({ setShowSearch }) => {
     //         );
     //     }
     // };
-    const handleKeyDown = (e, prevIndex) => {
+    const handleKeyDown = (e) => {
         if (e.key === "ArrowUp") {
             e.preventDefault();
             setFocusedIndex((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : resultRefs.current.length - 1));
@@ -48,6 +46,7 @@ const Search = ({ setShowSearch }) => {
             setFocusedIndex((prevIndex) => (prevIndex < resultRefs.current.length - 1 ? prevIndex + 1 : 0));
         }
     };
+    
     const handleClick = (e, productId) => {
         if (e.key === "Enter") {
             navigate("/product/" + productId);
@@ -56,13 +55,28 @@ const Search = ({ setShowSearch }) => {
 
     }
 
+    useEffect(() => {
+        if (data?.data?.length) {
+          // Nếu có kết quả sản phẩm thì focus vào sản phẩm đầu tiên
+          setFocusedIndex(0);
+        } else {
+          // Nếu không có kết quả sản phẩm thì set giá trị focusedIndex về -1
+          setFocusedIndex(-1);
+        }
+      }, [data?.data?.length]);
 
+   
+    useEffect(() => {
+        if (data?.data?.length) {
+          resultRefs.current[focusedIndex]?.focus();
+        }
+      }, [data, focusedIndex]);
 
     return (
         <div className="search-modal">
             <div className="form-field">
                 <input
-
+                    ref={inputRef}
                     autoFocus
                     type="text"
                     placeholder="Tìm kiếm sản phẩm"
@@ -74,7 +88,8 @@ const Search = ({ setShowSearch }) => {
                     onClick={() => setShowSearch(false)}
                 />
             </div>
-            <div className="search-result-content" onKeyDown={handleKeyDown}
+            <div className="search-result-content"
+                onKeyDown={handleKeyDown}
             >
                 {!data?.data?.length && (
                     <div className="start-msg">
@@ -87,7 +102,11 @@ const Search = ({ setShowSearch }) => {
                         return (
                             <div
                                 className="search-result-item"
-                                tabIndex={0}
+                                
+                                // role="option"
+                                tabIndex={index === focusedIndex ? 0 : -1}
+                                aria-label={`Search result item ${index + 1} of ${data.data.length}`}
+                                // aria-selected={index === focusedIndex}
                                 key={item.id}
                                 ref={(el) => (resultRefs.current[index] = el)}
                                 style={{
@@ -100,7 +119,7 @@ const Search = ({ setShowSearch }) => {
                                     // setShowSearch(false);
                                 }}
                                 onClick={() => {
-                                    
+
                                     navigate("/product/" + item.id);
                                     setShowSearch(false);
                                 }}

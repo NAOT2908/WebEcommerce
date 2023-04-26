@@ -17,8 +17,8 @@ const Category = () => {
 
     return (
         <div>
-            <div className="shop-by-category">
-                <div className="categories">
+            <div className="shop-category">
+                <div className="categoriess">
                     {categories?.data?.map((item) =>
                     (
                         <div

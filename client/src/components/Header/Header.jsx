@@ -41,7 +41,7 @@ const Header = () => {
                     <ul className="left">
                         <li onClick={() => navigate("/")} >Trang chủ</li>
                         <li>Giới thiệu</li>
-                        <li>Danh mục</li>
+                        <li><a href="#product">Sản Phẩm</a></li>
                     </ul>
                     <div className="center" onClick={() => navigate("/")}>STORE</div>
                     <div className="right">
